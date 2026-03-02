@@ -13,7 +13,7 @@ const modelsModuleHref = pathToFileURL(
 
 const originalFetch = global.fetch;
 const originalReadFileSync = fs.readFileSync;
-const trackedEnvKeys = ["OPENAI_API_KEY", "LUSKUI_MODEL_CACHE_MS", "CODEX_AUTH"] as const;
+const trackedEnvKeys = ["OPENAI_API_KEY", "TEROK_MODEL_CACHE_MS", "CODEX_AUTH"] as const;
 type EnvKey = (typeof trackedEnvKeys)[number];
 const originalEnv: Record<EnvKey, string | undefined> = Object.fromEntries(
   trackedEnvKeys.map((key) => [key, process.env[key]])
@@ -50,7 +50,7 @@ async function loadModelsModule({
   authPath
 }: Record<string, unknown> = {}): Promise<ModelsModule> {
   applyEnvOverride("OPENAI_API_KEY", apiKey as string | null | undefined);
-  applyEnvOverride("LUSKUI_MODEL_CACHE_MS", cacheMs as string | number | null | undefined);
+  applyEnvOverride("TEROK_MODEL_CACHE_MS", cacheMs as string | number | null | undefined);
   applyEnvOverride("CODEX_AUTH", authPath as string | null | undefined);
   if (fetchImpl === undefined) {
     global.fetch = originalFetch as typeof fetch;

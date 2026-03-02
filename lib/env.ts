@@ -95,7 +95,7 @@ function setIfMissing(key: string, value: string | null | undefined): void {
 function logLoadError(context: string, error: unknown): void {
   const message =
     error instanceof Error ? error.message : typeof error === "string" ? error : String(error);
-  console.warn(`[luskui] ${context}: ${message}`);
+  console.warn(`[terok-web-ui] ${context}: ${message}`);
 }
 
 function loadEnvFile(filePath: string): void {
@@ -173,7 +173,7 @@ function loadClaudeCredentials(filePath: string): void {
     }
     const oauthToken = extractClaudeOauthToken(parsed);
     if (oauthToken) {
-      setIfMissing("LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN", oauthToken);
+      setIfMissing("TEROK_CLAUDE_OAUTH_ACCESS_TOKEN", oauthToken);
       setIfMissing("CLAUDE_OAUTH_ACCESS_TOKEN", oauthToken);
     }
   } catch (error) {

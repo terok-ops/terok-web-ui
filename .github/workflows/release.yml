@@ -30,12 +30,12 @@ jobs:
         run: npm prune --omit=dev
 
       - name: Create release artifact
-        run: tar -czf luskui-dist.tar.gz dist node_modules package.json package-lock.json
+        run: tar -czf terok-web-ui-dist.tar.gz dist node_modules package.json package-lock.json
 
       - name: Publish latest release asset
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
           name: Latest build
-          files: luskui-dist.tar.gz
+          files: terok-web-ui-dist.tar.gz
           prerelease: true

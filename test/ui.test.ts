@@ -9,7 +9,7 @@ import { parseHTML } from "linkedom";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const indexHtml = fs.readFileSync(path.join(__dirname, "..", "static", "index.html"), "utf8");
-const THEME_KEY = "luskui-theme";
+const THEME_KEY = "terok-web-ui-theme";
 
 const inlineScripts: string[] = (() => {
   const { document } = parseHTML(indexHtml);

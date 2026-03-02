@@ -18,7 +18,7 @@ interface ModelResponse {
 }
 
 const DEFAULT_CLAUDE_MODEL =
-  process.env.LUSKUI_CLAUDE_MODEL || process.env.LUSKUI_MODEL || "claude-3-5-sonnet-20240620";
+  process.env.TEROK_CLAUDE_MODEL || process.env.TEROK_MODEL || "claude-3-5-sonnet-20240620";
 
 /**
  * Fetches available models from Anthropic API.
@@ -37,7 +37,7 @@ async function fetchModelsFromApi(): Promise<string[] | null> {
   if (!apiKey) return null;
 
   const controller = new AbortController();
-  const timeoutMs = Number(process.env.LUSKUI_MODEL_FETCH_TIMEOUT_MS || 5000);
+  const timeoutMs = Number(process.env.TEROK_MODEL_FETCH_TIMEOUT_MS || 5000);
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
   try {

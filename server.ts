@@ -1,5 +1,5 @@
 /**
- * Main server entry point for LuskUI.
+ * Main server entry point for Terok Web UI.
  *
  * This Express server provides:
  * - REST API for creating runs and managing model settings
@@ -41,7 +41,7 @@ const app = express();
 app.use(express.json());
 app.use("/static", express.static(staticDir));
 
-// Initialize the backend (Codex, Claude, or Mistral based on LUSKUI_BACKEND env)
+// Initialize the backend (Codex, Claude, or Mistral based on TEROK_BACKEND env)
 // Configuration is fixed for container context: full access, no approval needed
 const backend = getBackend({
   workingDirectory: REPO_ROOT,
@@ -60,9 +60,9 @@ const indexHtmlTemplate = fs.readFileSync(indexHtmlPath, "utf-8");
 
 // Generate dynamic page title from PROJECT_ID environment variable
 const projectId = process.env.PROJECT_ID || "(unknown project)";
-const pageTitle = `Lusk: ${projectId}`;
+const pageTitle = `Terok: ${projectId}`;
 const indexHtml = indexHtmlTemplate.replace(
-  /<title>LuskUI<\/title>/,
+  /<title>Terok Web UI<\/title>/,
   `<title>${pageTitle}</title>`
 );
 
@@ -202,5 +202,5 @@ app.post("/api/model", async (req: Request, res: Response) => {
 });
 
 app.listen(PORT, HOST, () =>
-  console.log(`LuskUI started (SDK streaming) on http://${HOST}:${PORT} — repo ${REPO_ROOT}`)
+  console.log(`Terok Web UI started (SDK streaming) on http://${HOST}:${PORT} — repo ${REPO_ROOT}`)
 );

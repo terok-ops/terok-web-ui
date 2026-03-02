@@ -5,7 +5,7 @@ import { LOG_PATH } from "./config.js";
 let logStream: fs.WriteStream | null;
 try {
   logStream = fs.createWriteStream(LOG_PATH, { flags: "a" });
-  console.log(`Logging LuskUI activity to ${LOG_PATH}`);
+  console.log(`Logging Terok Web UI activity to ${LOG_PATH}`);
 } catch (error) {
   console.error("Failed to open log file, falling back to console only", error);
   logStream = null;

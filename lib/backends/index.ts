@@ -10,7 +10,7 @@
  * - claude: Anthropic Claude API - uses Claude CLI OAuth or API key
  * - mistral: Mistral AI API - uses Mistral API key
  *
- * Selection is via LUSKUI_BACKEND environment variable.
+ * Selection is via TEROK_BACKEND environment variable.
  */
 import { createClaudeBackend } from "./claude/index.js";
 import { createCodexBackend } from "./codex/index.js";
@@ -20,15 +20,15 @@ import type { Backend, BackendConfig } from "./types.js";
 export type BackendId = "codex" | "claude" | "mistral";
 
 /**
- * Create a backend instance based on LUSKUI_BACKEND environment variable.
+ * Create a backend instance based on TEROK_BACKEND environment variable.
  * Defaults to "codex" if not specified.
  *
  * @param config - Backend configuration (working directory, sandbox mode, etc.)
  * @returns Configured backend implementing the Backend interface
- * @throws Error if LUSKUI_BACKEND specifies an unknown backend
+ * @throws Error if TEROK_BACKEND specifies an unknown backend
  */
 export function getBackend(config: BackendConfig): Backend {
-  const requested = (process.env.LUSKUI_BACKEND || "codex").toLowerCase();
+  const requested = (process.env.TEROK_BACKEND || "codex").toLowerCase();
   switch (requested) {
     case "codex":
       return createCodexBackend(config);
