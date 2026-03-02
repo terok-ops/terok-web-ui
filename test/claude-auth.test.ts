@@ -12,20 +12,20 @@ const claudeAuthModuleHref = pathToFileURL(
 
 type ClaudeAuthModule = typeof import("../lib/backends/claude/auth.js");
 type EnvKey =
-  | "LUSKUI_CLAUDE_API_KEY"
+  | "TEROK_CLAUDE_API_KEY"
   | "ANTHROPIC_API_KEY"
   | "CLAUDE_API_KEY"
-  | "LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN"
+  | "TEROK_CLAUDE_OAUTH_ACCESS_TOKEN"
   | "CLAUDE_OAUTH_ACCESS_TOKEN"
-  | "LUSKUI_CLAUDE_OAUTH_CACHE_MS";
+  | "TEROK_CLAUDE_OAUTH_CACHE_MS";
 
 const trackedEnvKeys: EnvKey[] = [
-  "LUSKUI_CLAUDE_API_KEY",
+  "TEROK_CLAUDE_API_KEY",
   "ANTHROPIC_API_KEY",
   "CLAUDE_API_KEY",
-  "LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN",
+  "TEROK_CLAUDE_OAUTH_ACCESS_TOKEN",
   "CLAUDE_OAUTH_ACCESS_TOKEN",
-  "LUSKUI_CLAUDE_OAUTH_CACHE_MS"
+  "TEROK_CLAUDE_OAUTH_CACHE_MS"
 ];
 
 const originalEnv: Record<EnvKey, string | undefined> = Object.fromEntries(
@@ -80,18 +80,18 @@ function mockFetch(
 }
 
 // Test API key precedence
-test("getClaudeApiKey prefers LUSKUI_CLAUDE_API_KEY over other env vars", async () => {
+test("getClaudeApiKey prefers TEROK_CLAUDE_API_KEY over other env vars", async () => {
   const { getClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: "luskui-key",
+    TEROK_CLAUDE_API_KEY: "terok-web-ui-key",
     ANTHROPIC_API_KEY: "anthropic-key",
     CLAUDE_API_KEY: "claude-key"
   });
-  assert.equal(getClaudeApiKey(), "luskui-key");
+  assert.equal(getClaudeApiKey(), "terok-web-ui-key");
 });
 
-test("getClaudeApiKey falls back to ANTHROPIC_API_KEY when LUSKUI_CLAUDE_API_KEY is missing", async () => {
+test("getClaudeApiKey falls back to ANTHROPIC_API_KEY when TEROK_CLAUDE_API_KEY is missing", async () => {
   const { getClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_API_KEY: null,
     ANTHROPIC_API_KEY: "anthropic-key",
     CLAUDE_API_KEY: "claude-key"
   });
@@ -100,7 +100,7 @@ test("getClaudeApiKey falls back to ANTHROPIC_API_KEY when LUSKUI_CLAUDE_API_KEY
 
 test("getClaudeApiKey falls back to CLAUDE_API_KEY when other keys are missing", async () => {
   const { getClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_API_KEY: null,
     ANTHROPIC_API_KEY: null,
     CLAUDE_API_KEY: "claude-key"
   });
@@ -109,7 +109,7 @@ test("getClaudeApiKey falls back to CLAUDE_API_KEY when other keys are missing",
 
 test("getClaudeApiKey returns null when no API keys are present", async () => {
   const { getClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_API_KEY: null,
     ANTHROPIC_API_KEY: null,
     CLAUDE_API_KEY: null
   });
@@ -119,20 +119,20 @@ test("getClaudeApiKey returns null when no API keys are present", async () => {
 // Test OAuth token extraction
 test("resolveClaudeApiKey prefers API key over OAuth token", async () => {
   const { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: "direct-api-key",
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token"
+    TEROK_CLAUDE_API_KEY: "direct-api-key",
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token"
   });
   const result = await resolveClaudeApiKey();
   assert.equal(result, "direct-api-key");
 });
 
-test("resolveClaudeApiKey uses LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN for minting", async () => {
+test("resolveClaudeApiKey uses TEROK_CLAUDE_OAUTH_ACCESS_TOKEN for minting", async () => {
   mockFetch({ ok: true, json: { raw_key: "minted-key" } });
   const { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_API_KEY: null,
     ANTHROPIC_API_KEY: null,
     CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token-1"
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token-1"
   });
   const result = await resolveClaudeApiKey();
   assert.equal(result, "minted-key");
@@ -141,8 +141,8 @@ test("resolveClaudeApiKey uses LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN for minting", as
 test("resolveClaudeApiKey falls back to CLAUDE_OAUTH_ACCESS_TOKEN for minting", async () => {
   mockFetch({ ok: true, json: { raw_key: "minted-key-2" } });
   const { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: null,
+    TEROK_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: null,
     CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token-2"
   });
   const result = await resolveClaudeApiKey();
@@ -151,10 +151,10 @@ test("resolveClaudeApiKey falls back to CLAUDE_OAUTH_ACCESS_TOKEN for minting", 
 
 test("resolveClaudeApiKey returns null when no credentials are available", async () => {
   const { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_API_KEY: null,
     ANTHROPIC_API_KEY: null,
     CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: null,
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: null,
     CLAUDE_OAUTH_ACCESS_TOKEN: null
   });
   const result = await resolveClaudeApiKey();
@@ -165,9 +165,9 @@ test("resolveClaudeApiKey returns null when no credentials are available", async
 test("resolveClaudeApiKey reuses cached key within TTL", async () => {
   mockFetch({ ok: true, json: { raw_key: "cached-key" } });
   const { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token",
-    LUSKUI_CLAUDE_OAUTH_CACHE_MS: "300000" // 5 minutes
+    TEROK_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token",
+    TEROK_CLAUDE_OAUTH_CACHE_MS: "300000" // 5 minutes
   });
 
   // First call should mint a new key
@@ -185,9 +185,9 @@ test("resolveClaudeApiKey reuses cached key within TTL", async () => {
 test("resolveClaudeApiKey re-mints when cache expires", async () => {
   mockFetch({ ok: true, json: { raw_key: "first-key" } });
   const { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token",
-    LUSKUI_CLAUDE_OAUTH_CACHE_MS: "1" // 1ms TTL - very short
+    TEROK_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token",
+    TEROK_CLAUDE_OAUTH_CACHE_MS: "1" // 1ms TTL - very short
   });
 
   // First call
@@ -208,9 +208,9 @@ test("resolveClaudeApiKey re-mints when cache expires", async () => {
 test("resolveClaudeApiKey re-mints when OAuth token changes", async () => {
   mockFetch({ ok: true, json: { raw_key: "first-token-key" } });
   let { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token-1",
-    LUSKUI_CLAUDE_OAUTH_CACHE_MS: "300000"
+    TEROK_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token-1",
+    TEROK_CLAUDE_OAUTH_CACHE_MS: "300000"
   });
 
   const result1 = await resolveClaudeApiKey();
@@ -219,9 +219,9 @@ test("resolveClaudeApiKey re-mints when OAuth token changes", async () => {
   // Reload module with different OAuth token
   mockFetch({ ok: true, json: { raw_key: "second-token-key" } });
   ({ resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token-2",
-    LUSKUI_CLAUDE_OAUTH_CACHE_MS: "300000"
+    TEROK_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token-2",
+    TEROK_CLAUDE_OAUTH_CACHE_MS: "300000"
   }));
 
   const result2 = await resolveClaudeApiKey();
@@ -231,9 +231,9 @@ test("resolveClaudeApiKey re-mints when OAuth token changes", async () => {
 test("resolveClaudeApiKey handles invalid TTL by not caching", async () => {
   mockFetch({ ok: true, json: { raw_key: "key-1" } });
   const { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token",
-    LUSKUI_CLAUDE_OAUTH_CACHE_MS: "invalid"
+    TEROK_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token",
+    TEROK_CLAUDE_OAUTH_CACHE_MS: "invalid"
   });
 
   await resolveClaudeApiKey();
@@ -249,9 +249,9 @@ test("resolveClaudeApiKey handles invalid TTL by not caching", async () => {
 test("resolveClaudeApiKey handles zero TTL by not caching", async () => {
   mockFetch({ ok: true, json: { raw_key: "key-1" } });
   const { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token",
-    LUSKUI_CLAUDE_OAUTH_CACHE_MS: "0"
+    TEROK_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token",
+    TEROK_CLAUDE_OAUTH_CACHE_MS: "0"
   });
 
   await resolveClaudeApiKey();
@@ -267,9 +267,9 @@ test("resolveClaudeApiKey handles zero TTL by not caching", async () => {
 test("resolveClaudeApiKey handles negative TTL by not caching", async () => {
   mockFetch({ ok: true, json: { raw_key: "key-1" } });
   const { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token",
-    LUSKUI_CLAUDE_OAUTH_CACHE_MS: "-1000"
+    TEROK_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token",
+    TEROK_CLAUDE_OAUTH_CACHE_MS: "-1000"
   });
 
   await resolveClaudeApiKey();
@@ -286,8 +286,8 @@ test("resolveClaudeApiKey handles negative TTL by not caching", async () => {
 test("resolveClaudeApiKey throws on failed OAuth request", async () => {
   mockFetch({ ok: false, status: 401, text: "Unauthorized" });
   const { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: "invalid-token"
+    TEROK_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: "invalid-token"
   });
 
   await assert.rejects(
@@ -299,8 +299,8 @@ test("resolveClaudeApiKey throws on failed OAuth request", async () => {
 test("resolveClaudeApiKey throws when OAuth response is missing raw_key and api_key", async () => {
   mockFetch({ ok: true, json: {} });
   const { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token"
+    TEROK_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token"
   });
 
   await assert.rejects(async () => resolveClaudeApiKey(), /Claude OAuth response missing API key/);
@@ -309,8 +309,8 @@ test("resolveClaudeApiKey throws when OAuth response is missing raw_key and api_
 test("resolveClaudeApiKey accepts api_key field as fallback", async () => {
   mockFetch({ ok: true, json: { api_key: "fallback-key" } });
   const { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token"
+    TEROK_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token"
   });
 
   const result = await resolveClaudeApiKey();
@@ -320,8 +320,8 @@ test("resolveClaudeApiKey accepts api_key field as fallback", async () => {
 test("resolveClaudeApiKey prefers raw_key over api_key", async () => {
   mockFetch({ ok: true, json: { raw_key: "primary-key", api_key: "fallback-key" } });
   const { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token"
+    TEROK_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token"
   });
 
   const result = await resolveClaudeApiKey();
@@ -331,8 +331,8 @@ test("resolveClaudeApiKey prefers raw_key over api_key", async () => {
 test("resolveClaudeApiKey throws when raw_key is empty string", async () => {
   mockFetch({ ok: true, json: { raw_key: "   " } });
   const { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token"
+    TEROK_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token"
   });
 
   await assert.rejects(async () => resolveClaudeApiKey(), /Claude OAuth response missing API key/);
@@ -344,8 +344,8 @@ test("resolveClaudeApiKey returns null when fetch is unavailable", async () => {
   globalThis.fetch = undefined;
 
   const { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token"
+    TEROK_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token"
   });
 
   const result = await resolveClaudeApiKey();
@@ -370,9 +370,9 @@ test("resolveClaudeApiKey deduplicates concurrent requests", async () => {
   }) as unknown as typeof globalThis.fetch;
 
   const { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token",
-    LUSKUI_CLAUDE_OAUTH_CACHE_MS: "300000"
+    TEROK_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token",
+    TEROK_CLAUDE_OAUTH_CACHE_MS: "300000"
   });
 
   // Make 3 concurrent calls
@@ -405,9 +405,9 @@ test("resolveClaudeApiKey allows new requests after inflight completes", async (
   }) as unknown as typeof globalThis.fetch;
 
   const { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token",
-    LUSKUI_CLAUDE_OAUTH_CACHE_MS: "1" // Very short TTL
+    TEROK_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token",
+    TEROK_CLAUDE_OAUTH_CACHE_MS: "1" // Very short TTL
   });
 
   // First call
@@ -446,8 +446,8 @@ test("resolveClaudeApiKey clears inflight on error", async () => {
   }) as unknown as typeof globalThis.fetch;
 
   const { resolveClaudeApiKey } = await loadClaudeAuthModule({
-    LUSKUI_CLAUDE_API_KEY: null,
-    LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token"
+    TEROK_CLAUDE_API_KEY: null,
+    TEROK_CLAUDE_OAUTH_ACCESS_TOKEN: "oauth-token"
   });
 
   // First call should fail

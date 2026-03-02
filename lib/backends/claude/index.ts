@@ -100,7 +100,7 @@ export function createClaudeBackend(config: BackendConfig): Backend {
       }
       if (!apiKey) {
         throw new Error(
-          "Missing Claude credentials (set LUSKUI_CLAUDE_API_KEY, ANTHROPIC_API_KEY, CLAUDE_API_KEY, or authenticate with the Claude CLI)."
+          "Missing Claude credentials (set TEROK_CLAUDE_API_KEY, ANTHROPIC_API_KEY, CLAUDE_API_KEY, or authenticate with the Claude CLI)."
         );
       }
 

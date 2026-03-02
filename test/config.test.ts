@@ -5,7 +5,7 @@ import os from "node:os";
 import path from "node:path";
 
 const originalRepoRoot = process.env.REPO_ROOT;
-const tempRepoRoot = fs.mkdtempSync(path.join(os.tmpdir(), "luskui-repo-"));
+const tempRepoRoot = fs.mkdtempSync(path.join(os.tmpdir(), "terok-web-ui-repo-"));
 process.env.REPO_ROOT = tempRepoRoot;
 
 const { resolveRepoPath } = await import("../lib/config.js");

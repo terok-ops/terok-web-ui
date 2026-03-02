@@ -16,7 +16,7 @@ const mistralModuleHref = pathToFileURL(
 ).href;
 
 const originalFetch = global.fetch;
-const trackedEnvKeys = ["LUSKUI_MISTRAL_MODEL"] as const;
+const trackedEnvKeys = ["TEROK_MISTRAL_MODEL"] as const;
 type EnvKey = (typeof trackedEnvKeys)[number];
 const originalEnv: Record<EnvKey, string | undefined> = Object.fromEntries(
   trackedEnvKeys.map((key) => [key, process.env[key]])
@@ -117,7 +117,7 @@ test("Mistral models fall back to env defaults without vibe config", async () =>
     restoreFile(repoConfigPath, { existed: false, contents: null });
     restoreFile(userConfigPath, { existed: false, contents: null });
 
-    process.env.LUSKUI_MISTRAL_MODEL = "env-model";
+    process.env.TEROK_MISTRAL_MODEL = "env-model";
 
     const { getModelSettings } = await loadMistralModelsModule();
     const settings = await getModelSettings();

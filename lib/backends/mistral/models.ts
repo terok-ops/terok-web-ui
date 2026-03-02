@@ -26,13 +26,13 @@ interface ModelResponse {
 const vibeConfig = getVibeConfig();
 
 const DEFAULT_MISTRAL_MODEL =
-  process.env.LUSKUI_MISTRAL_MODEL ||
-  process.env.LUSKUI_MODEL ||
+  process.env.TEROK_MISTRAL_MODEL ||
+  process.env.TEROK_MODEL ||
   vibeConfig?.active_model ||
   "mistral-large-latest";
 
 function getMistralApiKey(): string | null {
-  return process.env.LUSKUI_MISTRAL_API_KEY || process.env.MISTRAL_API_KEY || null;
+  return process.env.TEROK_MISTRAL_API_KEY || process.env.MISTRAL_API_KEY || null;
 }
 
 /**
@@ -44,7 +44,7 @@ async function fetchModelsFromApi(): Promise<string[] | null> {
   if (!apiKey) return null;
 
   const controller = new AbortController();
-  const timeoutMs = Number(process.env.LUSKUI_MODEL_FETCH_TIMEOUT_MS || 5000);
+  const timeoutMs = Number(process.env.TEROK_MODEL_FETCH_TIMEOUT_MS || 5000);
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
   try {

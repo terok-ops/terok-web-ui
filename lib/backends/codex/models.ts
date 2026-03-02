@@ -63,7 +63,7 @@ async function fetchModelsFromChatgpt(): Promise<string[] | null> {
   if (!token) return null;
 
   const controller = new AbortController();
-  const timeoutMs = Number(process.env.LUSKUI_MODEL_FETCH_TIMEOUT_MS || 5000);
+  const timeoutMs = Number(process.env.TEROK_MODEL_FETCH_TIMEOUT_MS || 5000);
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
   const clientVersion = getClientVersion();
 
@@ -121,7 +121,7 @@ async function fetchModelsFromApi(): Promise<string[] | null> {
   if (!token) return null;
 
   const controller = new AbortController();
-  const timeoutMs = Number(process.env.LUSKUI_MODEL_FETCH_TIMEOUT_MS || 5000);
+  const timeoutMs = Number(process.env.TEROK_MODEL_FETCH_TIMEOUT_MS || 5000);
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
 
   try {

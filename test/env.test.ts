@@ -19,7 +19,7 @@ const trackedEnvKeys = [
   "ANTHROPIC_API_KEY",
   "CLAUDE_API_KEY",
   "CLAUDE_OAUTH_ACCESS_TOKEN",
-  "LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN",
+  "TEROK_CLAUDE_OAUTH_ACCESS_TOKEN",
   "EXTRA_ENV",
   "EMPTY_ENV"
 ] as const;
@@ -54,7 +54,7 @@ async function loadEnvModule(): Promise<EnvModule> {
 }
 
 function makeTempDir(): string {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "luskui-env-"));
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "terok-web-ui-env-"));
   tempDirs.push(dir);
   return dir;
 }
@@ -121,7 +121,7 @@ test("hydrateEnv reads Claude access tokens from credentials JSON", async () => 
   const { hydrateEnv } = await loadEnvModule();
   hydrateEnv();
 
-  assert.equal(process.env.LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN, "oauth-token");
+  assert.equal(process.env.TEROK_CLAUDE_OAUTH_ACCESS_TOKEN, "oauth-token");
   assert.equal(process.env.CLAUDE_OAUTH_ACCESS_TOKEN, "oauth-token");
   assert.equal(process.env.ANTHROPIC_API_KEY, undefined);
   assert.equal(process.env.CLAUDE_API_KEY, undefined);

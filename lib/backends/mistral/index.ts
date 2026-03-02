@@ -31,7 +31,7 @@ type ContentChunk = {
 };
 
 function getMistralApiKey(): string | null {
-  return process.env.LUSKUI_MISTRAL_API_KEY || process.env.MISTRAL_API_KEY || null;
+  return process.env.TEROK_MISTRAL_API_KEY || process.env.MISTRAL_API_KEY || null;
 }
 
 /**
@@ -73,7 +73,7 @@ export function createMistralBackend(config: BackendConfig): Backend {
       }
       const apiKey = getMistralApiKey();
       if (!apiKey) {
-        throw new Error("Missing Mistral API key (set LUSKUI_MISTRAL_API_KEY or MISTRAL_API_KEY)");
+        throw new Error("Missing Mistral API key (set TEROK_MISTRAL_API_KEY or MISTRAL_API_KEY)");
       }
 
       const mistral = new Mistral({ apiKey });

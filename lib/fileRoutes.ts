@@ -93,7 +93,7 @@ fileRouter.post("/apply/:id", async (req: Request, res: Response) => {
   const patch = getLastDiff(req.params.id);
   if (!patch) return res.json({ ok: false, output: "No diff available" });
 
-  const tmp = path.join(REPO_ROOT, `.luskui-${crypto.randomUUID()}.patch`);
+  const tmp = path.join(REPO_ROOT, `.terok-web-ui-${crypto.randomUUID()}.patch`);
   try {
     fs.writeFileSync(tmp, patch, "utf8");
     const p = spawn("bash", ["-lc", `git apply --index '${tmp.replace(/'/g, "'\\''")}'`], {

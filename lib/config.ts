@@ -1,5 +1,5 @@
 /**
- * Global configuration for the LuskUI server.
+ * Global configuration for the Terok Web UI server.
  *
  * Configuration sources (in priority order):
  * 1. Environment variables (highest priority)
@@ -22,7 +22,7 @@ export const PORT: number = Number(process.env.PORT || 7860);
 /** Absolute path to REPO_ROOT for path resolution. */
 export const REPO_ROOT_ABS = path.resolve(REPO_ROOT);
 /** Path for structured JSON log output. */
-export const LOG_PATH = process.env.LUSKUI_LOG || path.join("/var/log", "luskui.log");
+export const LOG_PATH = process.env.TEROK_LOG || path.join("/var/log", "terok-web-ui.log");
 
 const HOME_DIR = os.homedir?.() ?? process.env.HOME ?? "";
 /** Path to Codex CLI config file (for default model/effort settings). */
@@ -46,7 +46,7 @@ const DEFAULT_MODEL_FROM_CONFIG = readConfigValue(/^\s*model\s*=\s*"([^"]+)"/m);
 const DEFAULT_EFFORT_FROM_CONFIG = readConfigValue(/^\s*model_reasoning_effort\s*=\s*"([^"]+)"/m);
 
 export const DEFAULT_MODEL: string | null =
-  process.env.LUSKUI_MODEL || DEFAULT_MODEL_FROM_CONFIG || null;
+  process.env.TEROK_MODEL || DEFAULT_MODEL_FROM_CONFIG || null;
 export const EFFORT_OPTIONS = ["minimal", "low", "medium", "high", "xhigh"] as const;
 export type ReasoningEffort = (typeof EFFORT_OPTIONS)[number];
 
@@ -59,12 +59,12 @@ function normalizeEffort(value: string | null | undefined): ReasoningEffort | nu
 }
 
 export const DEFAULT_EFFORT: ReasoningEffort | null = normalizeEffort(
-  process.env.LUSKUI_EFFORT || DEFAULT_EFFORT_FROM_CONFIG
+  process.env.TEROK_EFFORT || DEFAULT_EFFORT_FROM_CONFIG
 );
-export const MODEL_CACHE_TTL_MS = Number(process.env.LUSKUI_MODEL_CACHE_MS || 5 * 60 * 1000);
+export const MODEL_CACHE_TTL_MS = Number(process.env.TEROK_MODEL_CACHE_MS || 5 * 60 * 1000);
 
 export const SKIP_GIT_REPO_CHECK =
-  process.env.LUSKUI_SKIP_GIT_CHECK === "1" || !fs.existsSync(path.join(REPO_ROOT_ABS, ".git"));
+  process.env.TEROK_SKIP_GIT_CHECK === "1" || !fs.existsSync(path.join(REPO_ROOT_ABS, ".git"));
 
 /**
  * Resolves a relative path within the repository root.

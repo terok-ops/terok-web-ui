@@ -1,18 +1,18 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-const originalBackend = process.env.LUSKUI_BACKEND;
+const originalBackend = process.env.TEROK_BACKEND;
 
 test.afterEach(() => {
   if (originalBackend === undefined) {
-    delete process.env.LUSKUI_BACKEND;
+    delete process.env.TEROK_BACKEND;
   } else {
-    process.env.LUSKUI_BACKEND = originalBackend;
+    process.env.TEROK_BACKEND = originalBackend;
   }
 });
 
 test("getBackend selects the Codex adapter by default", async () => {
-  delete process.env.LUSKUI_BACKEND;
+  delete process.env.TEROK_BACKEND;
   const { getBackend } = await import("../lib/backends/index.js");
   const backend = getBackend({
     workingDirectory: "/tmp",
@@ -25,7 +25,7 @@ test("getBackend selects the Codex adapter by default", async () => {
 });
 
 test("getBackend rejects unsupported backend ids", async () => {
-  process.env.LUSKUI_BACKEND = "unsupported";
+  process.env.TEROK_BACKEND = "unsupported";
   const { getBackend } = await import("../lib/backends/index.js");
   assert.throws(() => {
     getBackend({
@@ -39,7 +39,7 @@ test("getBackend rejects unsupported backend ids", async () => {
 });
 
 test("getBackend selects the Claude adapter when configured", async () => {
-  process.env.LUSKUI_BACKEND = "claude";
+  process.env.TEROK_BACKEND = "claude";
   const { getBackend } = await import("../lib/backends/index.js");
   const backend = getBackend({
     workingDirectory: "/tmp",
@@ -52,10 +52,10 @@ test("getBackend selects the Claude adapter when configured", async () => {
 });
 
 test("Claude backend rejects runs without an API key", async () => {
-  delete process.env.LUSKUI_CLAUDE_API_KEY;
+  delete process.env.TEROK_CLAUDE_API_KEY;
   delete process.env.ANTHROPIC_API_KEY;
   delete process.env.CLAUDE_API_KEY;
-  delete process.env.LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN;
+  delete process.env.TEROK_CLAUDE_OAUTH_ACCESS_TOKEN;
   delete process.env.CLAUDE_OAUTH_ACCESS_TOKEN;
   const { createClaudeBackend } = await import("../lib/backends/claude/index.js");
   const backend = createClaudeBackend({
@@ -69,7 +69,7 @@ test("Claude backend rejects runs without an API key", async () => {
 });
 
 test("Claude backend rejects runs when network access is disabled", async () => {
-  process.env.LUSKUI_CLAUDE_API_KEY = "test-key";
+  process.env.TEROK_CLAUDE_API_KEY = "test-key";
   const { createClaudeBackend } = await import("../lib/backends/claude/index.js");
   const backend = createClaudeBackend({
     workingDirectory: "/tmp",
@@ -82,7 +82,7 @@ test("Claude backend rejects runs when network access is disabled", async () => 
 });
 
 test("getBackend selects the Mistral adapter when configured", async () => {
-  process.env.LUSKUI_BACKEND = "mistral";
+  process.env.TEROK_BACKEND = "mistral";
   const { getBackend } = await import("../lib/backends/index.js");
   const backend = getBackend({
     workingDirectory: "/tmp",
@@ -95,7 +95,7 @@ test("getBackend selects the Mistral adapter when configured", async () => {
 });
 
 test("Mistral backend rejects runs without an API key", async () => {
-  delete process.env.LUSKUI_MISTRAL_API_KEY;
+  delete process.env.TEROK_MISTRAL_API_KEY;
   delete process.env.MISTRAL_API_KEY;
   const { createMistralBackend } = await import("../lib/backends/mistral/index.js");
   const backend = createMistralBackend({
@@ -109,7 +109,7 @@ test("Mistral backend rejects runs without an API key", async () => {
 });
 
 test("Mistral backend rejects runs when network access is disabled", async () => {
-  process.env.LUSKUI_MISTRAL_API_KEY = "test-key";
+  process.env.TEROK_MISTRAL_API_KEY = "test-key";
   const { createMistralBackend } = await import("../lib/backends/mistral/index.js");
   const backend = createMistralBackend({
     workingDirectory: "/tmp",

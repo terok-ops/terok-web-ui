@@ -11,13 +11,13 @@ let inflightRequest: Promise<string | null> | null = null;
 
 function getClaudeOauthToken(): string | null {
   return (
-    process.env.LUSKUI_CLAUDE_OAUTH_ACCESS_TOKEN || process.env.CLAUDE_OAUTH_ACCESS_TOKEN || null
+    process.env.TEROK_CLAUDE_OAUTH_ACCESS_TOKEN || process.env.CLAUDE_OAUTH_ACCESS_TOKEN || null
   );
 }
 
 export function getClaudeApiKey(): string | null {
   return (
-    process.env.LUSKUI_CLAUDE_API_KEY ||
+    process.env.TEROK_CLAUDE_API_KEY ||
     process.env.ANTHROPIC_API_KEY ||
     process.env.CLAUDE_API_KEY ||
     null
@@ -26,7 +26,7 @@ export function getClaudeApiKey(): string | null {
 
 function shouldReuseCachedKey(oauthToken: string): boolean {
   if (!cachedKey || cachedKey.oauthToken !== oauthToken) return false;
-  const ttlMs = Number(process.env.LUSKUI_CLAUDE_OAUTH_CACHE_MS || 5 * 60 * 1000);
+  const ttlMs = Number(process.env.TEROK_CLAUDE_OAUTH_CACHE_MS || 5 * 60 * 1000);
   if (!Number.isFinite(ttlMs) || ttlMs <= 0) return false;
   return Date.now() - cachedKey.fetchedAt < ttlMs;
 }
