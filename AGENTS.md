@@ -75,7 +75,7 @@ ENV REPO_ROOT="/workspace/ultimate-container" \
     CODE_REPO="https://gitlab.com/electric-sheep/ultimate-container.git" \
     HOST="0.0.0.0" PORT="7860" \
     TEROK_DIR="/opt/terok-web-ui" \
-    TEROK_REPO="git@github.com:terok-ops/terok-web-ui.git"
+    TEROK_REPO="git@github.com:terok-ai/terok-web-ui.git"
 ```
 
 ---
